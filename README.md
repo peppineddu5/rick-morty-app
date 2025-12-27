@@ -1,40 +1,28 @@
-# Welcome to your Convex + Next.js app
+# Rick and Morty App
 
-This is a [Convex](https://convex.dev/) project created with [`npm create convex`](https://www.npmjs.com/package/create-convex).
+![Home Page](public/screenshots/home.png)
 
-After the initial setup (<2 minutes) you'll have a working full-stack app using:
+![Character Page](public/screenshots/character.png)
 
-- Convex as your backend (database, server logic)
-- [React](https://react.dev/) as your frontend (web page interactivity)
-- [Next.js](https://nextjs.org/) for optimized web hosting and page routing
-- [Tailwind](https://tailwindcss.com/) for building great looking accessible UI
+### Strategy
+For the database creation, I had two options regarding the Rick and Morty characters:
+1. Prefetch all characters and seed the database initially.
+2. Fetch and store them in the database on demand (lazy loading).
 
-## Get started
+I chose the second option because it presented a greater challenge and allowed me to extensively test different Convex functions and capabilities.
 
-If you just cloned this codebase and didn't use `npm create convex`, run:
+## Getting Started
 
-```
-npm install
-npm run dev
-```
+To run this project locally:
 
-If you're reading this README on GitHub and want to use this template, run:
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```
-npm create convex@latest -- -t nextjs
-```
+2. Run the development server (frontend and backend):
+   ```bash
+   npm run dev
+   ```
 
-## Learn more
-
-To learn more about developing your project with Convex, check out:
-
-- The [Tour of Convex](https://docs.convex.dev/get-started) for a thorough introduction to Convex principles.
-- The rest of [Convex docs](https://docs.convex.dev/) to learn about all Convex features.
-- [Stack](https://stack.convex.dev/) for in-depth articles on advanced topics.
-
-## Join the community
-
-Join thousands of developers building full-stack apps with Convex:
-
-- Join the [Convex Discord community](https://convex.dev/community) to get help in real-time.
-- Follow [Convex on GitHub](https://github.com/get-convex/), star and contribute to the open-source implementation of Convex.
+   This will start the Next.js frontend and the Convex backend.
