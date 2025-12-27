@@ -1,36 +1,34 @@
-import { Infer, v } from "convex/values";
 import { Doc } from "../_generated/dataModel";
-import { ConvexValidatorFromZod } from "convex-helpers/server/zod3";
+import { zodToConvex } from "convex-helpers/server/zod4"; // Use the value, not the type
+import z from "zod";
+import { WithoutSystemFields } from "convex/server";
+import { zStorageId } from "./utils";
 
-export const CharacterRawValidator = v.object({
-  id: v.number(),
-  name: v.string(),
-  status: v.union(v.literal("Alive"), v.literal("Dead"), v.literal("unknown")),
-  species: v.string(),
-  type: v.string(),
-  gender: v.union(
-    v.literal("Male"),
-    v.literal("Female"),
-    v.literal("Genderless"),
-    v.literal("unknown"),
-  ),
-  origin: v.object({
-    name: v.string(),
-    url: v.string(),
+export const BaseCharacterRawValidator = z.object({
+  id: z.number(),
+  name: z.string(),
+  status: z.enum(["Alive", "Dead", "unknown"]),
+  species: z.string(),
+  type: z.string(),
+  gender: z.enum(["Male", "Female", "Genderless", "unknown"]),
+  origin: z.object({
+    name: z.string(),
+    url: z.string(),
   }),
-  location: v.object({
-    name: v.string(),
-    url: v.string(),
+  location: z.object({
+    name: z.string(),
+    url: z.string(),
   }),
-  imageId: v.id("_storage"),
-  episode: v.array(v.string()),
-  url: v.string(),
-  created: v.string(),
+  imageId: z.string(),
+  episode: z.array(z.string()),
+  url: z.string(),
+  created: z.string(),
 });
-export const CharacterValidator = CharacterRawValidator.extend({
-  _id: v.id("character"),
-  _creationTime: v.number(),
+export const CharacterRawValidator = BaseCharacterRawValidator.extend({
+  imageId: zStorageId,
 });
-//ConvexValidatorFromZod(CharacterRawValidator)
-export type CharacterRaw = Infer<typeof CharacterRawValidator>;
+
+export const CharacterConvexValidator = zodToConvex(BaseCharacterRawValidator);
+
 export type Character = Doc<"character">;
+export type CharacterCreate = WithoutSystemFields<Character>;

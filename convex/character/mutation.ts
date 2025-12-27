@@ -1,12 +1,12 @@
-import { v } from "convex/values";
 import { CharacterRawValidator } from "../schema/character";
-//import { zCustomMutation } from "convex-helpers/server/zod3";
-//import { NoOp } from "convex-helpers/server/customFunctions";
+import { zCustomMutation } from "convex-helpers/server/zod4";
+import { NoOp } from "convex-helpers/server/customFunctions";
 import { internalMutation } from "../_generated/server";
+import z from "zod";
 
-//const zInternalMutation = zCustomMutation(internalMutation, NoOp);
+const zInternalMutation = zCustomMutation(internalMutation, NoOp);
 
-export const insert = internalMutation({
+export const insert = zInternalMutation({
   args: {
     character: CharacterRawValidator,
   },
@@ -17,9 +17,9 @@ export const insert = internalMutation({
   },
 });
 
-export const patchMaxCounter = internalMutation({
+export const patchMaxCounter = zInternalMutation({
   args: {
-    counter: v.number(),
+    counter: z.number(),
   },
   handler: async (ctx, { counter }) => {
     const existing = await ctx.db.query("characterNumber").first();

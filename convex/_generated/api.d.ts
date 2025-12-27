@@ -14,6 +14,7 @@ import type * as character_query from "../character/query.js";
 import type * as crons from "../crons.js";
 import type * as http from "../http.js";
 import type * as schema_character from "../schema/character.js";
+import type * as schema_utils from "../schema/utils.js";
 
 import type {
   ApiFromModules,
@@ -28,6 +29,7 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   http: typeof http;
   "schema/character": typeof schema_character;
+  "schema/utils": typeof schema_utils;
 }>;
 
 /**
