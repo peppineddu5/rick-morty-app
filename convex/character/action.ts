@@ -30,7 +30,7 @@ export const get = action({
     }
 
     const res = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
-    if (!res.ok) throw new ConvexError("Fetch error");
+    if (!res.ok) throw new ConvexError("Failed to fetch character from API");
     const character = await res.json();
 
     const storageId: Id<"_storage"> = await ctx.runAction(
@@ -46,7 +46,8 @@ export const get = action({
       },
     });
 
-    if (!inserted) throw new ConvexError("impossible error");
+    if (!inserted)
+      throw new ConvexError("Failed to insert character into database");
 
     return inserted;
   },
@@ -71,7 +72,8 @@ export const gets = zAction({
 
     if (!maxId) throw new ConvexError("No max id found");
 
-    if (from > maxId) throw new ConvexError("Invalid input");
+    if (from > maxId)
+      throw new ConvexError("Starting ID is beyond maximum character ID");
 
     to = Math.min(to, maxId);
     const charachterArr = await ctx.runQuery(internal.character.query.gets, {
@@ -102,7 +104,8 @@ export const patchMaxNumber = internalAction({
   args: {},
   handler: async (ctx) => {
     const res = await fetch(`https://rickandmortyapi.com/api/character`);
-    if (!res.ok) throw new ConvexError("Fetch error");
+    if (!res.ok)
+      throw new ConvexError("Failed to fetch character count from API");
     const data = await res.json();
     const counter = data.info?.count;
     await ctx.runMutation(internal.character.mutation.patchMaxCounter, {
@@ -117,7 +120,7 @@ export const saveImageFromUrl = internalAction({
   },
   handler: async (ctx, { url }) => {
     const imageRes = await fetch(url);
-    if (!imageRes.ok) throw new ConvexError("Image fetch error");
+    if (!imageRes.ok) throw new ConvexError("Failed to fetch character image");
 
     const imageBlob = await imageRes.blob();
 
