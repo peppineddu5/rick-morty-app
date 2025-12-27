@@ -1,27 +1,23 @@
 import { Hono } from "hono";
 import { HonoWithConvex, HttpRouterWithHono } from "convex-helpers/server/hono";
 import { ActionCtx } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
 import z from "zod";
 import { zValidator } from "@hono/zod-validator";
+import { zStorageId } from "./schema/utils"
 
 const app: HonoWithConvex<ActionCtx> = new Hono();
 
-const imageParamSchema = z.object({
-  storageId: z // zid do not support the "_storage"
-    .string()
-    .refine((val): val is Id<"_storage"> => val.startsWith("kg"), {
-      message: "Invalid storage ID format",
-    }),
-});
+
 
 app.get(
   "/character/image/:storageId",
-  zValidator("param", imageParamSchema),
+  zValidator("param", z.object({
+    storageId: zStorageId,
+  })),
   async (c) => {
     const { storageId } = c.req.valid("param");
 
-    const url = await c.env.storage.getUrl(storageId as Id<"_storage">);
+    const url = await c.env.storage.getUrl(storageId);
 
     if (!url) {
       return c.notFound();
